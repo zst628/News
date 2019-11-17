@@ -29,7 +29,9 @@ def create_app(config_name):
     # 配置项目日志
     setup_log(config_name)
     app = Flask(__name__)
-
+    # 注册蓝图
+    from info.modules.index import index_blu
+    app.register_blueprint(index_blu)
     return app
 
 
