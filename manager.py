@@ -1,13 +1,14 @@
-import redis as redis
+import redis
 from flask import Flask
 from flask_migrate import MigrateCommand, Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_script import Manager
 from flask_session import Session
-app = Flask(__name__)
+from config import Config
+"""
 class Config(object):
-    """工程配置信息"""
+    工程配置信息
     SECRET_KEY = "EjpNVSNQTyGi1VvWECj9TvC/+kq3oujee2kTfQUs8yCM6xX9Yjq52v54g+HVoknA"
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = "mysql://root:mysql@127.0.0.1:3306/information"
@@ -23,23 +24,28 @@ class Config(object):
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 redis_store = redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
+"""
+app = Flask(__name__)
 
-# 开启CSRF
+
+# 配置
+app.config.from_object(Config)
+# 配置数据库
+db = SQLAlchemy(app)
+# 配置redis
+redis_store = redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
+# 开启csrf保护
 CSRFProtect(app)
-# chushihua
+# 设置session保存位置
 Session(app)
+
 # Flask-Script与数据库迁移扩展
 manager = Manager(app)
 Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
-
-
-
-
-
 @app.route('/')
 def index():
-    return 'idnex'
+    return 'index'
 if __name__ == '__main__':
-    app.run()
+    manager.run()
