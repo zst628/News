@@ -1,5 +1,7 @@
 import redis
-# from config import Config
+import logging
+
+
 class Config(object):
     """工程配置信息"""
     SECRET_KEY = "EjpNVSNQTyGi1VvWECj9TvC/+kq3oujee2kTfQUs8yCM6xX9Yjq52v54g+HVoknA"
@@ -18,10 +20,12 @@ class Config(object):
 class DevelopementConfig(Config):
     """开发模式下的配置"""
     DEBUG = True
-
+    # 默认日志等级
+    LOG_LEVEL = logging.DEBUG
 class ProductionConfig(Config):
     """生产模式下的配置"""
-    DEBUG = True
+    LOG_LEVEL = logging.ERROR
+
 # 定义配置字典
 config = {
     "development": DevelopementConfig,
